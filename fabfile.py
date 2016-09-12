@@ -86,11 +86,24 @@ def configureSensu():
     sudo("update-rc.d uchiwa defaults")
 
 @task
+def ufwEnable():
+    sudo('ufw --force reset')
+    sudo('ufw allow 22/tcp')
+    sudo('ufw allow 3000/tcp')
+    sudo('ufw default deny')
+    sudo('ufw --force enable')
+
+@task
+def ufwStatus():
+    sudo("ufw status numbered")
+
+@task
 def sensuStart():
     run("sudo service sensu-server start")
     run("sudo service sensu-client start")
     run("sudo service sensu-api start")
     run("sudo service uchiwa start")
+
 
 @task
 def sensuStop():
