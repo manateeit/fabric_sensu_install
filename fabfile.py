@@ -33,6 +33,12 @@ def addSudo():
     put("./sudoers", "/etc/sudoers", use_sudo=True)
 
 @task
+def lockRoot():
+    put("./sshd_config", "/etc/ssh/", use_sudo=True)
+    run("sudo service ssh restart")
+
+
+@task
 def setupCustomUser(customUser):
     addCustomUser(customUser)
     setupSSH4User(customUser)
@@ -130,6 +136,7 @@ def CREATEUSER(customUser):
     addCustomUser(customUser)
     setupSSH4User(customUser)
     addSudo()
+    lockRoot()
 
 @task
 def INSTALL():
