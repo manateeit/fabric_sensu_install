@@ -27,9 +27,9 @@ def setupSSH4User(customUser):
     run("chmod 0600 /home/" + customUser + "/.ssh/authorized_keys ")
     run("chown " + customUser + ":" + customUser + " /home/" + customUser + "/.ssh/authorized_keys ")
 
+# TODO need to create SED to change the SUDOERS file locally with the customUser
 @task 
 def addSudo():
-    
     put("./sudoers", "/etc/sudoers", use_sudo=True)
 
 @task
@@ -37,7 +37,6 @@ def setupCustomUser(customUser):
     addCustomUser(customUser)
     setupSSH4User(customUser)
     addSudo()
-
 
 @task
 def installRabbitMQ():
@@ -125,5 +124,24 @@ def sensuRestart():
     sensuStop()
     sensuStatus()
     
+
+@task
+def CREATEUSER(customUser):
+    addCustomUser(customUser)
+    setupSSH4User(customUser)
+    addSudo()
+
+@task
+def INSTALL():
+    installRabbitMQ()
+    installRedis()
+    installSensu()
+    configureSensu()
+    ufwEnable()
+    sensuStart()
+    sensuStatus()
+
+
+
 
 
