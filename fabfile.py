@@ -56,7 +56,7 @@ def installRabbitMQ():
     run("sudo service rabbitmq-server start")
     run("cd /tmp && wget http://sensuapp.org/docs/"+ SENSUVERSION +"/tools/ssl_certs.tar && tar -xvf ssl_certs.tar")
     run("cd /tmp/ssl_certs && ./ssl_certs.sh generate")
-    sudo("mkdir -p /etc/rabbitmq/ssl && sudo cp /tmp/ssl_certs/sensu_ca/cacert.pem /tmp/ssl_certs/server/cert.pem /tmp/ssl_certs/server/key.pem /etc/rabbitmq/ssl")
+    sudo("mkdir -p /etc/rabbitmq/ssl && cp /tmp/ssl_certs/sensu_ca/cacert.pem /tmp/ssl_certs/server/cert.pem /tmp/ssl_certs/server/key.pem /etc/rabbitmq/ssl")
     put("./rabbitmq.config", "/etc/rabbitmq/rabbitmq.config",use_sudo=True)
     run("sudo service rabbitmq-server restart")
     sudo("rabbitmqctl add_vhost /sensu")
