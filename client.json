@@ -1,0 +1,8 @@
+{
+  "client": {
+    "name": "sensu.itmanaged.solutions",
+    "address": "localhost",
+    "subscriptions": [ "ALL" ]
+  }
+}
+
