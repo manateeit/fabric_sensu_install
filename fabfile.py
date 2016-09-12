@@ -37,7 +37,6 @@ def lockRoot():
     put("./sshd_config", "/etc/ssh/", use_sudo=True)
     run("sudo service ssh restart")
 
-
 @task
 def setupCustomUser(customUser):
     addCustomUser(customUser)
