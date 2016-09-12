@@ -8,23 +8,23 @@ with open(HOMEDIR + '/.ssh/id_rsa.pub', 'r') as sshpubkeyfile:
     SSHPUBKEY=sshpubkeyfile.read().replace('\n', '')
 
 @task
-def adduser(username):
-    run('adduser --disabled-password --gecos "" '+ username)
+def addCustomUser(customUser):
+    run('adduser --disabled-password --gecos "" '+ customUser)
 
 @task
-def setupSSH4User(username):
-    run("mkdir /home/" + username + "/.ssh")
-    run("chmod 0700 /home/" + username + "/.ssh ")
-    run("chown" + username + ":" + username + "/home/" + username + "/.ssh ")
-    run("echo " + SSHPUBKEY + " >> home/" + username + "/.ssh/authorized_keys")
-    run("chmod 0600 /home/" + username + "/.ssh/authorized_keys ")
-    run("chown" + username + ":" + username + "/home/" + username + "/.ssh/authorized_keys ")
+def setupSSH4User(customUser):
+    run("mkdir /home/" + customUser + "/.ssh")
+    run("chmod 0700 /home/" + customUser + "/.ssh ")
+    run("chown" + customUser + ":" + customUser + "/home/" + customUser + "/.ssh ")
+    run("echo " + SSHPUBKEY + " >> home/" + customUser + "/.ssh/authorized_keys")
+    run("chmod 0600 /home/" + customUser + "/.ssh/authorized_keys ")
+    run("chown" + customUser + ":" + customUser + "/home/" + customUser + "/.ssh/authorized_keys ")
 
 
 
 @task
 def installRabbitMQ():
-    sudo("apt-get update && sudo apt-get -y upgrade")
+    sudo("apt-get update && apt-get -y upgrade")
     sudo('echo "deb http://www.rabbitmq.com/debian/ testing main" | tee -a /etc/apt/sources.list.d/rabbitmq.list')
     sudo("curl -L -o ~/rabbitmq-signing-key-public.asc http://www.rabbitmq.com/rabbitmq-signing-key-public.asc")
     sudo("apt-key add ~/rabbitmq-signing-key-public.asc")
