@@ -74,11 +74,11 @@ def installSensu():
 
 @task
 def configureSensu():
-    put("./rabbitmq.json", "/etc/sensu/conf.d/rabbitmq.json", use_sudo=True)
-    put("./redis.json","/etc/sensu/conf.d/redis.json", use_sudo=True)
-    put("./api.json", "/etc/sensu/conf.d/api.json", use_sudo=True)
-    put("./uchiwa.json", "/etc/sensu/conf.d/uchiwa.json", use_sudo=True)
-    put("./client.json", "/etc/sensu/conf.d/client.json", use_sudo=True)
+    put("./rabbitmq.json", "/etc/sensu/rabbitmq.json", use_sudo=True)
+    put("./redis.json","/etc/sensu/redis.json", use_sudo=True)
+    put("./api.json", "/etc/sensu/api.json", use_sudo=True)
+    put("./uchiwa.json", "/etc/sensu/uchiwa.json", use_sudo=True)
+    put("./client.json", "/etc/sensu/client.json", use_sudo=True)
     sudo("update-rc.d sensu-server defaults")
     sudo("update-rc.d sensu-client defaults")
     sudo("update-rc.d sensu-api defaults")
@@ -120,8 +120,8 @@ def sensuStatus():
 
 @task
 def sensuRestart():
-    sensuStart()
     sensuStop()
+    sensuStart()
     sensuStatus()
     
 
