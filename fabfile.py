@@ -2,46 +2,7 @@ from fabric.api import *
 from fabric.contrib.files import exists
 import os
 
-HOMEDIR = os.environ['HOME']
 SENSUVERSION = "0.26"
-
-with open(HOMEDIR + '/.ssh/id_rsa.pub', 'r') as sshpubkeyfile:
-    SSHPUBKEY=sshpubkeyfile.read().replace('\n', '')
-
-@task
-def addCustomUser(customUser):
-    run('adduser --disabled-password --gecos "" '+ customUser)
-
-@task
-def delCustomUser(customUser):
-    run('deluser '+ customUser)
-    run('rm -Rf  /home/'+ customUser)
-
-
-@task
-def setupSSH4User(customUser):
-    run("mkdir /home/" + customUser + "/.ssh")
-    run("chmod 0700 /home/" + customUser + "/.ssh ")
-    run("chown " + customUser + ":" + customUser + " /home/" + customUser + "/.ssh ")
-    run("echo " + SSHPUBKEY + " >> /home/" + customUser + "/.ssh/authorized_keys")
-    run("chmod 0600 /home/" + customUser + "/.ssh/authorized_keys ")
-    run("chown " + customUser + ":" + customUser + " /home/" + customUser + "/.ssh/authorized_keys ")
-
-# TODO need to create SED to change the SUDOERS file locally with the customUser
-@task 
-def addSudo():
-    put("./sudoers", "/etc/sudoers", use_sudo=True)
-
-@task
-def lockRoot():
-    put("./sshd_config", "/etc/ssh/", use_sudo=True)
-    run("sudo service ssh restart")
-
-@task
-def setupCustomUser(customUser):
-    addCustomUser(customUser)
-    setupSSH4User(customUser)
-    addSudo()
 
 @task
 def installRabbitMQ():
@@ -83,7 +44,7 @@ def configureSensu():
     put("./redis.json","/etc/sensu/redis.json", use_sudo=True)
     put("./api.json", "/etc/sensu/api.json", use_sudo=True)
     put("./uchiwa.json", "/etc/sensu/uchiwa.json", use_sudo=True)
-    put("./client.json", "/etc/sensu/client.json", use_sudo=True)
+    put("./client.json", "/etc/sensu/conf.d/client.json", use_sudo=True)
     sudo("update-rc.d sensu-server defaults")
     sudo("update-rc.d sensu-client defaults")
     sudo("update-rc.d sensu-api defaults")
